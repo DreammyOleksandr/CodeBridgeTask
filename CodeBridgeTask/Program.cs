@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddDbContext<ApplicationDbContext>(options=>options
-    .UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+    .AddDbContext<ApplicationDbContext>(options => options
+        .UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
 builder.Services.AddScoped<IDogManager, DogManager>();
 builder.Services.AddScoped<IDogRepository, DogRepository>();

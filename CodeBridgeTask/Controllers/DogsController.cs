@@ -17,7 +17,7 @@ namespace CodeBridgeTask.Controllers
         {
             try
             {
-                return Ok(await _dogManager.GetAll());
+                return Ok(await _dogManager.GetRange(queryParams));
             }
             catch (Exception e)
             {
