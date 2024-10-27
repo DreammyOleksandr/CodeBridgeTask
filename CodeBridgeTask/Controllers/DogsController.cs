@@ -13,7 +13,7 @@ namespace CodeBridgeTask.Controllers
         private readonly IDogManager _dogManager = dogManager;
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Dog>>> GetAll()
+        public async Task<ActionResult<IEnumerable<Dog>>> GetAll(QueryParams queryParams)
         {
             try
             {
