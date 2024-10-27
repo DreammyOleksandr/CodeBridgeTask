@@ -22,6 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\CodeBridgeTask.BusinessLogic\CodeBridgeTask.BusinessLogic.csproj" />
       <ProjectReference Include="..\CodeBridgeTask.DataAccess\CodeBridgeTask.DataAccess.csproj" />
     </ItemGroup>
 
