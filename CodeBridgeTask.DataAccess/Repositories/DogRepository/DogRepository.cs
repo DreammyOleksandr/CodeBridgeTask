@@ -9,6 +9,9 @@ public class DogRepository(ApplicationDbContext db) : IDogRepository
 {
     private readonly ApplicationDbContext _db = db;
 
+    public async Task<Dog> GetByNameAndColorAsync(string name, string color)
+        => await _db.Dogs.FirstOrDefaultAsync(d => d.Name == name && d.Color == color);
+
     public async Task<IEnumerable<Dog>> GetRange(QueryParams queryParams)
     {
         var query = _db.Dogs.AsQueryable();
@@ -23,10 +26,10 @@ public class DogRepository(ApplicationDbContext db) : IDogRepository
         };
 
         if (orderExpression is not null)
-            query = queryParams.Order == "desc" 
-                ? query.OrderByDescending(orderExpression) 
+            query = queryParams.Order == "desc"
+                ? query.OrderByDescending(orderExpression)
                 : query.OrderBy(orderExpression);
-        
+
         query = query
             .Skip((queryParams.PageNumber - 1) * queryParams.PageSize)
             .Take(queryParams.PageSize);
@@ -35,8 +38,15 @@ public class DogRepository(ApplicationDbContext db) : IDogRepository
     }
 
 
-    public Task<Dog> Create(Dog dog)
+    public async Task Create(Dog dog)
     {
-        throw new NotImplementedException();
+        await _db.Dogs.AddAsync(dog);
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task<bool> IsExistingAsync(Dog dog)
+    {
+        Dog existingDog = await GetByNameAndColorAsync(dog.Name, dog.Color);
+        return existingDog is not null;
     }
 }

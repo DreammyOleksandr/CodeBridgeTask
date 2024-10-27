@@ -1,7 +1,6 @@
 using AutoMapper;
 using CodeBridgeTask.BusinessLogic.Managers.DogManager;
 using CodeBridgeTask.DataAccess.Models;
-using CodeBridgeTask.DataAccess.Repositories.DogRepository;
 using CodeBridgeTask.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +15,7 @@ namespace CodeBridgeTask.Controllers
         
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<Dog>>> GetAll(QueryParams queryParams)
         {
             try
@@ -25,7 +25,7 @@ namespace CodeBridgeTask.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                throw;
+                return StatusCode(500, new { message = "An unexpected error occurred. Please try again later." });
             }
         }
 
@@ -33,7 +33,7 @@ namespace CodeBridgeTask.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<DogDTO>> Post([FromBody] DogDTO dogDto)
+        public async Task<ActionResult<DogDTO>> Post(DogDTO dogDto)
         {
             try
             {
@@ -43,14 +43,16 @@ namespace CodeBridgeTask.Controllers
                 Dog dog = _mapper.Map<Dog>(dogDto);
                 
                 if (dog.Id != 0) 
-                    return StatusCode(StatusCodes.Status500InternalServerError);
+                    return StatusCode(500, new { message = "An unexpected error occurred. Dog Id should be 0 on creating."});
+
+                await _dogManager.Create(dog);
                 
-                return Ok(await _dogManager.Create(dog));
+                return Ok(dogDto);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                throw;
+                return StatusCode(500, new { message = "An unexpected error occurred. Please try again later." });
             }
         }
     }

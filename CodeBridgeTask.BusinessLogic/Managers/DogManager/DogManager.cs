@@ -1,6 +1,5 @@
 using CodeBridgeTask.DataAccess.Models;
 using CodeBridgeTask.DataAccess.Repositories.DogRepository;
-using Microsoft.EntityFrameworkCore;
 
 namespace CodeBridgeTask.BusinessLogic.Managers.DogManager;
 
@@ -10,9 +9,13 @@ public class DogManager(IDogRepository dogRepository) : IDogManager
 
     public async Task<IEnumerable<Dog>> GetRange(QueryParams queryParams)
         => await _dogRepository.GetRange(queryParams);
-    
-    public Task<Dog> Create(Dog dog)
+
+    public async Task Create(Dog dog)
     {
-        throw new NotImplementedException();
+        if (dog.Weight <= 0) throw new ArgumentException("Weight can't be less or equal 0");
+        if (dog.TailLength < 0) throw new ArgumentException("Tail length can't be less than 0");
+        if (await _dogRepository.IsExistingAsync(dog)) throw new ArgumentException("Dog already exists");
+        
+        _dogRepository.Create(dog);
     }
 }
