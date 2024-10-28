@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeBridgeTask.DataAccess",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeBridgeTask.BusinessLogic", "CodeBridgeTask.BusinessLogic\CodeBridgeTask.BusinessLogic.csproj", "{89BF3517-8E8C-4418-AB44-BAC4E6F07B8B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeBridgeTask.Tests", "CodeBridgeTask.Tests\CodeBridgeTask.Tests.csproj", "{0EEF61F9-34A0-4663-B150-588857A799F3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{89BF3517-8E8C-4418-AB44-BAC4E6F07B8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89BF3517-8E8C-4418-AB44-BAC4E6F07B8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89BF3517-8E8C-4418-AB44-BAC4E6F07B8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EEF61F9-34A0-4663-B150-588857A799F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EEF61F9-34A0-4663-B150-588857A799F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EEF61F9-34A0-4663-B150-588857A799F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EEF61F9-34A0-4663-B150-588857A799F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
