@@ -12,7 +12,7 @@ public class DogRepository(ApplicationDbContext db) : IDogRepository
     public async Task<Dog> GetByNameAndColorAsync(string name, string color)
         => await _db.Dogs.FirstOrDefaultAsync(d => d.Name == name && d.Color == color);
 
-    public async Task<IEnumerable<Dog>> GetRange(QueryParams queryParams)
+    public async Task<IEnumerable<Dog>> GetRangeAsync(QueryParams queryParams)
     {
         var query = _db.Dogs.AsQueryable();
 
@@ -39,7 +39,7 @@ public class DogRepository(ApplicationDbContext db) : IDogRepository
     }
 
 
-    public async Task Create(Dog dog)
+    public async Task CreateAsync(Dog dog)
     {
         await _db.Dogs.AddAsync(dog);
         await _db.SaveChangesAsync();

@@ -16,12 +16,12 @@ namespace CodeBridgeTask.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<Dog>>> GetAll(QueryParamsDTO queryParamsDto)
+        public async Task<ActionResult<IEnumerable<Dog>>> GetRange(QueryParamsDTO queryParamsDto)
         {
             try
             {
                 QueryParams queryParams = _mapper.Map<QueryParams>(queryParamsDto);
-                return Ok(await _dogManager.GetRange(queryParams));
+                return Ok(await _dogManager.GetRangeAsync(queryParams));
             }
             catch (Exception e)
             {
@@ -34,11 +34,11 @@ namespace CodeBridgeTask.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<DogDTO>> Post(DogDTO dogDto)
+        public async Task<ActionResult<DogDTO>> Create(DogDTO dogDto)
         {
             try
             {
-                await _dogManager.Create(_mapper.Map<Dog>(dogDto));
+                await _dogManager.CreateAsync(_mapper.Map<Dog>(dogDto));
                 return Ok(dogDto);
             }
             catch (Exception e)
