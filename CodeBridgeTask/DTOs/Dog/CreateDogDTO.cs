@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CodeBridgeTask.DTOs;
 
-public class DogDTO
+public class CreateDogDTO
 {
     [Required(ErrorMessage = "Please enter the name of the dog")]
     public string Name { get; set; }
