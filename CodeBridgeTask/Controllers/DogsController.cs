@@ -12,16 +12,16 @@ namespace CodeBridgeTask.Controllers
     {
         private readonly IDogManager _dogManager = dogManager;
         private readonly IMapper _mapper = mapper;
-        
+
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<Dog>>> GetRange(QueryParamsDTO queryParamsDto)
+        public async Task<ActionResult<IEnumerable<DogDTO>>> GetRange(QueryParamsDTO queryParamsDto)
         {
             try
             {
                 QueryParams queryParams = _mapper.Map<QueryParams>(queryParamsDto);
-                return Ok(await _dogManager.GetRangeAsync(queryParams));
+                return Ok(_mapper.Map<IEnumerable<DogDTO>>(await _dogManager.GetRangeAsync(queryParams)));
             }
             catch (Exception e)
             {
