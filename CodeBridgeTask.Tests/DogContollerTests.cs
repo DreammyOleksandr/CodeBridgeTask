@@ -15,6 +15,16 @@ public class DogControllerTests
     private readonly DogsController _controller;
     private readonly IMapper _mapper;
 
+    private readonly List<Dog> mockDogs =
+    [
+        new() { Id = 1, Name = "Neo", Color = "Red & Amber", TailLength = 1, Weight = 1 },
+        new() { Id = 2, Name = "Jessy", Color = "Black", TailLength = 2, Weight = 2 },
+        new() { Id = 3, Name = "Nessy", Color = "White", TailLength = 3, Weight = 3 },
+        new() { Id = 4, Name = "Messy", Color = "Green", TailLength = 4, Weight = 4 },
+        new() { Id = 5, Name = "Lessy", Color = "Blue", TailLength = 5, Weight = 5 },
+        new() { Id = 6, Name = "Pepsi", Color = "Yellow", TailLength = 6, Weight = 6 },
+    ];
+    
     public DogControllerTests()
     {
         _dogManagerMock = new Mock<IDogManager>();
@@ -29,11 +39,6 @@ public class DogControllerTests
     public async Task GetAllDogs_ReturnsOkResult_WithListOfTwoDogs()
     {
         // Arrange
-        List<Dog> mockDogs =
-        [
-            new() { Id = 1, Name = "Neo", Color = "Red & Amber", TailLength = 22, Weight = 32 },
-            new() { Id = 2, Name = "Jessy", Color = "Black & White", TailLength = 7, Weight = 14 },
-        ];
         _dogManagerMock.Setup(manager => manager.GetRangeAsync(null).Result).Returns(mockDogs);
 
         // Act
@@ -42,7 +47,7 @@ public class DogControllerTests
 
         // Assert
         Assert.IsType<ActionResult<IEnumerable<DogDTO>>>(result);
-        Assert.Equal(2, actual.Count());
+        Assert.Equal(6, actual.Count());
     }
 
     [Fact]
@@ -56,15 +61,7 @@ public class DogControllerTests
             PageSize = 2,
         };
         // Arrange
-        List<Dog> mockDogs =
-        [
-            new() { Id = 1, Name = "Neo", Color = "Red & Amber", TailLength = 1, Weight = 1 },
-            new() { Id = 2, Name = "Jessy", Color = "Black", TailLength = 2, Weight = 2 },
-            new() { Id = 3, Name = "Nessy", Color = "White", TailLength = 3, Weight = 3 },
-            new() { Id = 4, Name = "Messy", Color = "Green", TailLength = 4, Weight = 4 },
-            new() { Id = 5, Name = "Lessy", Color = "Blue", TailLength = 5, Weight = 5 },
-            new() { Id = 6, Name = "Pepsi", Color = "Yellow", TailLength = 6, Weight = 6 },
-        ];
+        
         _dogManagerMock
             .Setup(manager => manager.GetRangeAsync(It.IsAny<QueryParams>()))
             .ReturnsAsync(mockDogs.Skip(4).Take(2).ToList());
@@ -77,5 +74,32 @@ public class DogControllerTests
         Assert.Equal(2, actual.Count());
         Assert.Equal(5, actual[0].Id);
         Assert.Equal(6, actual[1].Id);
+    }
+    
+    [Fact]
+    public async Task GetDogsRange_ReturnsFilteredDogs_ByName()
+    {
+        // Arrange
+        QueryParamsDTO queryParamsDto = new QueryParamsDTO()
+        {
+            Attribute = "name",
+            Order = "desc",
+            PageNumber = 1,
+            PageSize = 2,
+        };
+        
+        _dogManagerMock
+            .Setup(manager => manager.GetRangeAsync(It.IsAny<QueryParams>()))
+            .ReturnsAsync(mockDogs.OrderByDescending(dog => dog.Name).Take(3).ToList());
+
+        // Act
+        var result = await _controller.GetRange(queryParamsDto);
+        var actual = (result.Result as OkObjectResult).Value as List<DogDTO>;
+
+        // Assert
+        Assert.Equal(3, actual.Count);
+        Assert.Equal(actual[0].Name, "Pepsi"); 
+        Assert.Equal(actual[1].Name, "Nessy"); 
+        Assert.Equal(actual[2].Name, "Neo"); 
     }
 }
