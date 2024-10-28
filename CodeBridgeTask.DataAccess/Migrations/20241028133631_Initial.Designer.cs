@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CodeBridgeTask.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241027123634_Initial")]
+    [Migration("20241028133631_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

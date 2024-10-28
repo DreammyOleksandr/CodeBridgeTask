@@ -21,6 +21,6 @@ public class DogManager(IDogRepository dogRepository) : IDogManager
         if (await _dogRepository.IsExistingAsync(dog)) throw new ArgumentException("Dog already exists.");
         if (dog.Id != 0) throw new ArgumentException("Dog Id should be 0 on creation.");
 
-        _dogRepository.CreateAsync(dog);
+        await _dogRepository.CreateAsync(dog);
     }
 }
