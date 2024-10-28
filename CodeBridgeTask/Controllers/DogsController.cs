@@ -16,10 +16,11 @@ namespace CodeBridgeTask.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<Dog>>> GetAll(QueryParams queryParams)
+        public async Task<ActionResult<IEnumerable<Dog>>> GetAll(QueryParamsDTO queryParamsDto)
         {
             try
             {
+                QueryParams queryParams = _mapper.Map<QueryParams>(queryParamsDto);
                 return Ok(await _dogManager.GetRange(queryParams));
             }
             catch (Exception e)

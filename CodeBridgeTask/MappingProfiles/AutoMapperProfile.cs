@@ -9,5 +9,6 @@ public class AutoMapperProfile : Profile
     public AutoMapperProfile()
     {
         CreateMap<DogDTO, Dog>().ReverseMap();
+        CreateMap<QueryParamsDTO, QueryParams>().ReverseMap();
     }
 }

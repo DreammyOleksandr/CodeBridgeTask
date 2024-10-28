@@ -26,7 +26,7 @@ public class DogRepository(ApplicationDbContext db) : IDogRepository
         };
 
         if (orderExpression is not null)
-            query = queryParams.Order.Equals("desc")
+            query = queryParams.Order == "desc"
                 ? query.OrderByDescending(orderExpression)
                 : query.OrderBy(orderExpression);
 
