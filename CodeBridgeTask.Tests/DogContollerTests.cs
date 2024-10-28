@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using AutoMapper;
 using CodeBridgeTask.BusinessLogic.Managers.DogManager;
 using CodeBridgeTask.Controllers;
@@ -102,4 +103,33 @@ public class DogControllerTests
         Assert.Equal(actual[1].Name, "Nessy"); 
         Assert.Equal(actual[2].Name, "Neo"); 
     }
+    
+    [Fact]
+    public async Task CreateDog_ReturnsCreatedDog()
+    {
+        // Arrange
+        var createDogDto = new CreateDogDTO
+        {
+            Name = "Buddy",
+            Color = "Brown",
+            TailLength = 20,
+            Weight = 20
+        };
+        
+        _dogManagerMock
+            .Setup(manager => manager.CreateAsync(It.IsAny<Dog>()))
+            .Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _controller.Create(createDogDto);
+        CreateDogDTO actual = (result.Result as ObjectResult).Value as CreateDogDTO;
+        
+        // Assert
+        var returnedDogDto = Assert.IsType<CreateDogDTO>(actual);
+        Assert.Equal(createDogDto.Name, returnedDogDto.Name);
+        Assert.Equal(createDogDto.Color, returnedDogDto.Color);
+        Assert.Equal(createDogDto.TailLength, returnedDogDto.TailLength);
+        Assert.Equal(createDogDto.Weight, returnedDogDto.Weight);
+    }
+
 }
