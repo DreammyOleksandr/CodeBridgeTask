@@ -1,6 +1,7 @@
 using CodeBridgeTask.BusinessLogic.Managers.DogManager;
 using CodeBridgeTask.DataAccess;
 using CodeBridgeTask.DataAccess.Repositories.DogRepository;
+using CodeBridgeTask.MiddleWare.RequestsHandle;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddDbContext<ApplicationDbContext>(options => options
         .UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+
+builder.Services.AddSingleton<RequestsHandler>(_ => new RequestsHandler(
+    builder.Services.BuildServiceProvider().GetRequiredService<RequestDelegate>()
+));
 
 builder.Services.AddScoped<IDogManager, DogManager>();
 builder.Services.AddScoped<IDogRepository, DogRepository>();
@@ -29,6 +34,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<RequestsHandler>();
 
 app.MapControllers();
 
