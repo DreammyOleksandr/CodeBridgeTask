@@ -26,10 +26,11 @@ public class DogRepository(ApplicationDbContext db) : IDogRepository
         };
 
         if (orderExpression is not null)
-            query = queryParams.Order == "desc"
+            query = queryParams.Order.Equals("desc")
                 ? query.OrderByDescending(orderExpression)
                 : query.OrderBy(orderExpression);
 
+        //Default page values are: Number: 1; Size: 10
         query = query
             .Skip((queryParams.PageNumber - 1) * queryParams.PageSize)
             .Take(queryParams.PageSize);

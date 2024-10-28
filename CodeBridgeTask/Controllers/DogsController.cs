@@ -37,16 +37,8 @@ namespace CodeBridgeTask.Controllers
         {
             try
             {
-                if(dogDto is null) 
-                    return BadRequest();
-                
-                Dog dog = _mapper.Map<Dog>(dogDto);
-                
-                if (dog.Id != 0) 
-                    return StatusCode(500, new { message = "An unexpected error occurred. Dog Id should be 0 on creating."});
-
-                await _dogManager.Create(dog);
-                
+                if(dogDto is null) return BadRequest();
+                await _dogManager.Create(_mapper.Map<Dog>(dogDto));
                 return Ok(dogDto);
             }
             catch (Exception e)
