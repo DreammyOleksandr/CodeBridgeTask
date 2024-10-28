@@ -34,7 +34,7 @@ public class DogControllerTests
             new() { Id = 1, Name = "Neo", Color = "Red & Amber", TailLength = 22, Weight = 32 },
             new() { Id = 2, Name = "Jessy", Color = "Black & White", TailLength = 7, Weight = 14 },
         ];
-        _dogManagerMock.Setup(service => service.GetRangeAsync(null).Result).Returns(mockDogs);
+        _dogManagerMock.Setup(manager => manager.GetRangeAsync(null).Result).Returns(mockDogs);
 
         // Act
         var result = await _controller.GetRange(null);
@@ -43,5 +43,39 @@ public class DogControllerTests
         // Assert
         Assert.IsType<ActionResult<IEnumerable<DogDTO>>>(result);
         Assert.Equal(2, actual.Count());
+    }
+
+    [Fact]
+    public async Task GetDogsPaginatedRange_ReturnsListOfTwoDogs_WithIds5And6()
+    {
+        QueryParamsDTO queryParamsDto = new QueryParamsDTO()
+        {
+            Attribute = string.Empty,
+            Order = string.Empty,
+            PageNumber = 3,
+            PageSize = 2,
+        };
+        // Arrange
+        List<Dog> mockDogs =
+        [
+            new() { Id = 1, Name = "Neo", Color = "Red & Amber", TailLength = 1, Weight = 1 },
+            new() { Id = 2, Name = "Jessy", Color = "Black", TailLength = 2, Weight = 2 },
+            new() { Id = 3, Name = "Nessy", Color = "White", TailLength = 3, Weight = 3 },
+            new() { Id = 4, Name = "Messy", Color = "Green", TailLength = 4, Weight = 4 },
+            new() { Id = 5, Name = "Lessy", Color = "Blue", TailLength = 5, Weight = 5 },
+            new() { Id = 6, Name = "Pepsi", Color = "Yellow", TailLength = 6, Weight = 6 },
+        ];
+        _dogManagerMock
+            .Setup(manager => manager.GetRangeAsync(It.IsAny<QueryParams>()))
+            .ReturnsAsync(mockDogs.Skip(4).Take(2).ToList());
+
+        // Act
+        var result = await _controller.GetRange(queryParamsDto);
+        var actual = (result.Result as OkObjectResult).Value as List<DogDTO>;
+
+        // Assert
+        Assert.Equal(2, actual.Count());
+        Assert.Equal(5, actual[0].Id);
+        Assert.Equal(6, actual[1].Id);
     }
 }
