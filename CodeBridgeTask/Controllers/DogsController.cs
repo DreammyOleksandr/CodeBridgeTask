@@ -38,7 +38,6 @@ namespace CodeBridgeTask.Controllers
         {
             try
             {
-                if(dogDto is null) return BadRequest();
                 await _dogManager.Create(_mapper.Map<Dog>(dogDto));
                 return Ok(dogDto);
             }
